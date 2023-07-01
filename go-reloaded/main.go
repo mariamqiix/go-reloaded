@@ -9,7 +9,7 @@ import (
 
 func main() {
 	osNo := len(os.Args)
-	if osNo != 3 {
+	if osNo == 0 {
 		return
 	} else {
 		input := os.Args[1]
@@ -64,30 +64,52 @@ func hex(text string) string {
 
 func bin(text string) string {
 
-
 }
 
 func up(text string) string {
-
+	X := []rune(text)
+	c := ""
+	for i := 0; i < len(X); i++ {
+		if X[i] <= 122 && X[i] >= 97 {
+			c = c + string(X[i]-32)
+		} else {
+			c = c + string(X[i])
+		}
+	}
+	return c
 }
 
 func low(text string) string {
-
+	X := []rune(text)
+	c := ""
+	for i := 0; i < len(X); i++ {
+		if X[i] <= 90 && X[i] >= 65 {
+			c = c + string(X[i]+32)
+		} else {
+			c = c + string(X[i])
+		}
+	}
+	return c
 }
 
-func cap(text string) string {
 
+func cap(text string) string {
+	c := ""
+	if rune(text) <= 122 && rune(text) >= 97 {
+		c = c + string(rune(text)-32)
+	} else {
+		c = c + string(rune(text))
+	}
+	return c
 }
 
 func an(text string) string {
-
+	
 }
 
 func punctuations(text string) string {
 
 }
-
-
 
 func printError(err error) {
 	fmt.Println("ERROR: " + err.Error())
@@ -107,7 +129,6 @@ func IterativePower(nb int, power int) int {
 	}
 	return nn
 }
-
 
 func Atoi(s string) int {
 	if len(s) == 0 {
