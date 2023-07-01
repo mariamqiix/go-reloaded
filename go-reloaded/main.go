@@ -92,7 +92,6 @@ func low(text string) string {
 	return c
 }
 
-
 func cap(text string) string {
 	c := ""
 	if rune(text) <= 122 && rune(text) >= 97 {
@@ -104,7 +103,7 @@ func cap(text string) string {
 }
 
 func an(text string) string {
-	
+
 }
 
 func punctuations(text string) string {
