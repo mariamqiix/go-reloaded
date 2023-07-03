@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func main() {
@@ -19,15 +20,40 @@ func main() {
 			fmt.Println(err.Error())
 			return
 		}
-		defer file.Close()
 		text := readFile(input)
 		text = correct(text)
-
+		file.WriteString(text)
+		defer file.Close()
 	}
 }
 
-func correct(text string) string {
-
+func correct(s string) string {
+	n := SplitWhiteSpaces(s)
+	search(n , "(hex)" , hex)
+	search(n , "(bin)" , bin)
+	search(n , "(low)" , low)
+	search(n , "a" , an)
+	for x := 2 ; x <= 10 ; x++{
+		search(n , ("(low, " + string(x) +")") , low)
+	}
+	search(n , "(up)" , up)
+	for x := 2 ; x <= 10 ; x++{
+		search(n , "(up, " + string(x) +")" , up)
+	}
+	search(n , "(cap)" , cap)
+	for x := 2 ; x <= 10 ; x++{
+		search(n , "(cap, " + string(x) +")" , cap)
+	}
+	z := strings.Join(n," ")
+	z = strings.ReplaceAll(z , " (hex)" , "")
+	z = strings.ReplaceAll(z , " (bin)" , "")
+	z = strings.ReplaceAll(z , " (low)" , "")
+	z = strings.ReplaceAll(z , " hex)" , "")
+	z = strings.ReplaceAll(z , " (cap)" , "")
+	z = strings.ReplaceAll(z , " (up)" , "")
+	z = strings.ReplaceAll(z , "A " , "")
+	return z
+	
 }
 
 func readFile(name string) string {
@@ -46,24 +72,13 @@ func readFile(name string) string {
 }
 
 func hex(text string) string {
-	var z int
-	for _, c := range text {
-		power := 0
-		if c >= '0' && c <= '9' {
-			x := Atoi(string(c))
-			z += x * IterativePower(16, power)
-			power++
-		} else {
-			x := Atoi(string((c - 'A')))
-			z += x * IterativePower(16, power)
-			power++
-		}
-	}
-	return strconv.Itoa(z)
+		z , _ := strconv.ParseUint(text, 16, 64)
+	return strconv.Itoa(int(z))
 }
 
 func bin(text string) string {
-
+		z , _:= strconv.ParseUint(text, 2, 64)
+	return strconv.Itoa(int(z))
 }
 
 func up(text string) string {
@@ -93,21 +108,16 @@ func low(text string) string {
 }
 
 func cap(text string) string {
-	c := ""
-	if rune(text) <= 122 && rune(text) >= 97 {
-		c = c + string(rune(text)-32)
-	} else {
-		c = c + string(rune(text))
-	}
-	return c
+	s := strings.Title(text)
+	return s
+
 }
 
 func an(text string) string {
-
-}
-
-func punctuations(text string) string {
-
+	if text[0] == 'a' {
+		text = "an " + text
+	}
+	return text
 }
 
 func printError(err error) {
@@ -129,25 +139,28 @@ func IterativePower(nb int, power int) int {
 	return nn
 }
 
-func Atoi(s string) int {
-	if len(s) == 0 {
-		return 0
-	}
-	sign := 1
-	result := 0
-	if s[0] == '+' || s[0] == '-' {
-		if s[0] == '-' {
-			sign = -1
+func SplitWhiteSpaces(s string) []string {
+	var res []string
+	var x string
+	snew := s + " "
+	for _, c := range snew {
+		if c == ' ' || c == '	' || c == '\n' {
+			if x != "" {
+				res = append(res, x)
+				x = ""
+			}
+		} else {
+			x += string(c)
 		}
-		s = s[1:]
 	}
-	for _, ch := range s {
-		if ch < '0' || ch > '9' {
-			return 0
+	return res
+}
+
+func search(n []string, sep string, function func(s string) string) []string {
+	for x := 1; x < len(n); x++ {
+		if strings.Contains(n[x], sep) {
+			n[x-1] = function(n[x-1])
 		}
-		digit := int(ch - '0')
-		result = result*10 + digit
 	}
-	result *= sign
-	return result
+	return n
 }
