@@ -29,31 +29,31 @@ func main() {
 
 func correct(s string) string {
 	n := SplitWhiteSpaces(s)
-	search(n , "(hex)" , hex)
-	search(n , "(bin)" , bin)
-	search(n , "(low)" , low)
-	search(n , "a" , an)
-	for x := 2 ; x <= 10 ; x++{
-		search(n , ("(low, " + string(x) +")") , low)
+	search(n, "(hex)", hex)
+	search(n, "(bin)", bin)
+	search(n, "(low)", low)
+	search(n, "a", an)
+	for x := 1; x <= 10; x++ {
+		search2(n, "(low,", string(x)+")", x, low)
 	}
-	search(n , "(up)" , up)
-	for x := 2 ; x <= 10 ; x++{
-		search(n , "(up, " + string(x) +")" , up)
+	search(n, "(up)", up)
+	for x := 1; x <= 10; x++ {
+		search2(n, "(up,", string(x)+")", x, up)
 	}
-	search(n , "(cap)" , cap)
-	for x := 2 ; x <= 10 ; x++{
-		search(n , "(cap, " + string(x) +")" , cap)
+	search(n, "(cap)", cap)
+	for x := 1; x <= 10; x++ {
+		search2(n, "cap," , string(x) , x , cap)
 	}
-	z := strings.Join(n," ")
-	z = strings.ReplaceAll(z , " (hex)" , "")
-	z = strings.ReplaceAll(z , " (bin)" , "")
-	z = strings.ReplaceAll(z , " (low)" , "")
-	z = strings.ReplaceAll(z , " hex)" , "")
-	z = strings.ReplaceAll(z , " (cap)" , "")
-	z = strings.ReplaceAll(z , " (up)" , "")
-	z = strings.ReplaceAll(z , "A " , "")
+	z := strings.Join(n, " ")
+	z = strings.ReplaceAll(z, " (hex)", "")
+	z = strings.ReplaceAll(z, " (bin)", "")
+	z = strings.ReplaceAll(z, " (low)", "")
+	z = strings.ReplaceAll(z, " hex)", "")
+	z = strings.ReplaceAll(z, " (cap)", "")
+	z = strings.ReplaceAll(z, " (up)", "")
+	z = strings.ReplaceAll(z, "A ", "")
 	return z
-	
+
 }
 
 func readFile(name string) string {
@@ -72,12 +72,12 @@ func readFile(name string) string {
 }
 
 func hex(text string) string {
-		z , _ := strconv.ParseUint(text, 16, 64)
+	z, _ := strconv.ParseUint(text, 16, 64)
 	return strconv.Itoa(int(z))
 }
 
 func bin(text string) string {
-		z , _:= strconv.ParseUint(text, 2, 64)
+	z, _ := strconv.ParseUint(text, 2, 64)
 	return strconv.Itoa(int(z))
 }
 
@@ -164,3 +164,17 @@ func search(n []string, sep string, function func(s string) string) []string {
 	}
 	return n
 }
+
+func search2(n []string, sep , sepp string, v int, function func(s string) string) []string {
+	for x := 1; x < len(n); x++ {
+		if strings.Contains(n[x], sep) {
+			if strings.Contains(n[x+1], sepp) {
+				for z := 1; z <= v ; z++ {
+					n[x-z] = function(n[x-z]) 
+				}
+			}
+		}
+	}
+	return n
+}
+
