@@ -42,7 +42,7 @@ func correct(s string) string {
 	}
 	search(n, "(cap)", cap)
 	for x := 1; x <= 10; x++ {
-		search2(n, "cap," , string(x) , x , cap)
+		search2(n, "cap,", string(x), x, cap)
 	}
 	z := strings.Join(n, " ")
 	z = strings.ReplaceAll(z, " (hex)", "")
@@ -165,16 +165,15 @@ func search(n []string, sep string, function func(s string) string) []string {
 	return n
 }
 
-func search2(n []string, sep , sepp string, v int, function func(s string) string) []string {
+func search2(n []string, sep, sepp string, v int, function func(s string) string) []string {
 	for x := 1; x < len(n); x++ {
 		if strings.Contains(n[x], sep) {
 			if strings.Contains(n[x+1], sepp) {
-				for z := 1; z <= v ; z++ {
-					n[x-z] = function(n[x-z]) 
+				for z := 1; z <= v; z++ {
+					n[x-z] = function(n[x-z])
 				}
 			}
 		}
 	}
 	return n
 }
-
