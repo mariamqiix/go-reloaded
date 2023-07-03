@@ -34,15 +34,15 @@ func correct(s string) string {
 	search(n, "(low)", low)
 	search(n, "a", an)
 	for x := 1; x <= 10; x++ {
-		search2(n, "(low,", string(x)+")", x, low)
+		search2(n, "(low,", x, x, low)
 	}
 	search(n, "(up)", up)
 	for x := 1; x <= 10; x++ {
-		search2(n, "(up,", string(x)+")", x, up)
+		search2(n, "(up,", x, x, up)
 	}
 	search(n, "(cap)", cap)
 	for x := 1; x <= 10; x++ {
-		search2(n, "cap,", string(x), x, cap)
+		search2(n, "cap,", x, x, cap)
 	}
 	z := strings.Join(n, " ")
 	z = strings.ReplaceAll(z, " (hex)", "")
@@ -52,6 +52,9 @@ func correct(s string) string {
 	z = strings.ReplaceAll(z, " (cap)", "")
 	z = strings.ReplaceAll(z, " (up)", "")
 	z = strings.ReplaceAll(z, "A ", "")
+	for x := 1; x <= 10; x++ {
+		z = replace(z, "(cap, ", x)
+	}
 	return z
 
 }
@@ -165,15 +168,25 @@ func search(n []string, sep string, function func(s string) string) []string {
 	return n
 }
 
-func search2(n []string, sep, sepp string, v int, function func(s string) string) []string {
+func search2(n []string, sep string, sepp, v int, function func(s string) string) []string {
 	for x := 1; x < len(n); x++ {
 		if strings.Contains(n[x], sep) {
-			if strings.Contains(n[x+1], sepp) {
+			num := strconv.Itoa(sepp)
+			if strings.Contains(n[x+1], num) {
 				for z := 1; z <= v; z++ {
 					n[x-z] = function(n[x-z])
 				}
 			}
 		}
+
 	}
 	return n
+}
+
+func replace(z, n string, x int) string {
+
+	num := strconv.Itoa(x)
+	n += num + ")"
+	z = strings.ReplaceAll(z, n, "")
+	return z
 }
