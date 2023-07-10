@@ -91,12 +91,22 @@ func readFile(name string) string {
 }
 
 func hex(text string) string {
+	cond = true
+	for _, c:= range text {
+		if (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')|| (c >= 'a' && c <= 'f') {
+			cond = true 
+		} else {
+			return text
+		}
+	}
+	if cond = true {
 	z, _ := strconv.ParseUint(text, 16, 64)
 	if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
 		return "'" + strconv.Itoa(int(z))
 	} else {
 		return strconv.Itoa(int(z))
 	}
+}
 }
 
 func bin(text string) string {
