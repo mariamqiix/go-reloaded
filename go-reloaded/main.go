@@ -49,8 +49,6 @@ func correct(s string) string {
 	z = strings.ReplaceAll(z, " hex)", "")
 	z = strings.ReplaceAll(z, " (cap)", "")
 	z = strings.ReplaceAll(z, " (up)", "")
-	z = strings.ReplaceAll(z, " '", "'")
-	z = strings.ReplaceAll(z, ":' ", ": '")
 	for x := 1; x <= 10; x++ {
 		z = replace(z, "(cap, ", x)
 		z = replace(z, "(up, ", x)
@@ -58,6 +56,7 @@ func correct(s string) string {
 	}
 	z = strings.ReplaceAll(z, ",", ", ")
 	x := SplitWhiteSpaces(z)
+	x = dothe(x)
 	x = format(x, ",")
 	x = format(x, ",")
 	x = format(x, "?")
@@ -226,10 +225,28 @@ func format(n []string, a string) []string {
 func ancorrect(n []string) []string {
 	for x := 1; x < len(n); x++ {
 		if strings.Contains(string(n[x][0]), "a") || strings.Contains(string(n[x][0]), "u") || strings.Contains(string(n[x][0]), "i") || strings.Contains(string(n[x][0]), "e") || strings.Contains(string(n[x][0]), "o") {
-			if an(n[x-1]) {
+			if an(n[x-1]) && len(n[x-1]) == 1 {
 				n[x-1] += "n"
 			}
 		}
 	}
 	return n
+}
+
+func dothe(n []string) []string {
+	var newArr []string
+	for x := 0; x < len(n); x++ {
+		newArr = append(newArr, n[x])
+		if strings.Contains(n[x], ":") && n[x+1] == "‘" {
+			b := (n[x+1] + n[x+2])
+			newArr = append(newArr, b)
+			x++
+			x++
+		} else if x+1 < len(n) && n[x+1] == "‘" {
+			b := (n[x] + n[x+1])
+			newArr[x-1] = b
+			x++
+		}
+	}
+	return newArr
 }
