@@ -26,13 +26,11 @@ func main() {
 		defer file.Close()
 	}
 }
-
 func correct(s string) string {
 	n := SplitWhiteSpaces(s)
 	search(n, "(hex)", hex)
 	search(n, "(bin)", bin)
 	search(n, "(low)", low)
-	search(n, "a", an)
 	for x := 1; x <= 10; x++ {
 		search2(n, "(low,", x, x, low)
 	}
@@ -51,12 +49,26 @@ func correct(s string) string {
 	z = strings.ReplaceAll(z, " hex)", "")
 	z = strings.ReplaceAll(z, " (cap)", "")
 	z = strings.ReplaceAll(z, " (up)", "")
-	z = strings.ReplaceAll(z, "A ", "")
+	z = strings.ReplaceAll(z, " '", "'")
+	z = strings.ReplaceAll(z, ":' ", ": '")
 	for x := 1; x <= 10; x++ {
 		z = replace(z, "(cap, ", x)
+		z = replace(z, "(up, ", x)
+		z = replace(z, "(low, ", x)
 	}
-	return z
-
+	z = strings.ReplaceAll(z, ",", ", ")
+	x := SplitWhiteSpaces(z)
+	x = format(x, ",")
+	x = format(x, ",")
+	x = format(x, "?")
+	x = format(x, "!")
+	x = format(x, "…")
+	x = format(x, ":")
+	x = format(x, ";")
+	x = format(x, ".")
+	x = ancorrect(x)
+	b := strings.Join(x, " ")
+	return b
 }
 
 func readFile(name string) string {
@@ -116,11 +128,11 @@ func cap(text string) string {
 
 }
 
-func an(text string) string {
+func an(text string) bool {
 	if text[0] == 'a' {
-		text = "an " + text
+		return true
 	}
-	return text
+	return false
 }
 
 func printError(err error) {
@@ -172,13 +184,16 @@ func search2(n []string, sep string, sepp, v int, function func(s string) string
 	for x := 1; x < len(n); x++ {
 		if strings.Contains(n[x], sep) {
 			num := strconv.Itoa(sepp)
-			if strings.Contains(n[x+1], num) {
-				for z := 1; z <= v; z++ {
-					n[x-z] = function(n[x-z])
+			if x+1 < len(n) {
+				if strings.Contains(n[x+1], num) {
+					for z := 1; z <= v; z++ {
+						if z <= x {
+							n[x-z] = function(n[x-z])
+						}
+					}
 				}
 			}
 		}
-
 	}
 	return n
 }
@@ -189,4 +204,32 @@ func replace(z, n string, x int) string {
 	n += num + ")"
 	z = strings.ReplaceAll(z, n, "")
 	return z
+}
+func format(n []string, a string) []string {
+	var newArr []string
+	for x := 0; x < len(n); x++ {
+		if x != len(n)-1 {
+			if strings.Contains(string(n[x+1][0]), a) {
+				b := (n[x] + n[x+1])
+				newArr = append(newArr, b)
+				x++
+			} else {
+				newArr = append(newArr, n[x])
+			}
+		} else {
+			newArr = append(newArr, n[x])
+		}
+	}
+	return newArr
+}
+
+func ancorrect(n []string) []string {
+	for x := 1; x < len(n); x++ {
+		if strings.Contains(string(n[x][0]), "a") || strings.Contains(string(n[x][0]), "u") || strings.Contains(string(n[x][0]), "i") || strings.Contains(string(n[x][0]), "e") || strings.Contains(string(n[x][0]), "o") {
+			if an(n[x-1]) {
+				n[x-1] += "n"
+			}
+		}
+	}
+	return n
 }
