@@ -10,7 +10,7 @@ import (
 
 func main() {
 	osNo := len(os.Args)
-	if osNo != 3  {
+	if osNo != 3 {
 
 		return
 	} else {
@@ -29,7 +29,7 @@ func main() {
 }
 func correct(s string) string {
 	n := SplitWhiteSpaces(s)
-	
+
 	for x := 1; x <= 1000; x++ {
 		search2(n, "(low,", x, x, low)
 	}
@@ -52,14 +52,14 @@ func correct(s string) string {
 	z = strings.ReplaceAll(z, "hex) ", "")
 	z = strings.ReplaceAll(z, "(cap) ", "")
 	z = strings.ReplaceAll(z, "(up) ", "")
-	
+
 	z = strings.ReplaceAll(z, " .", ".")
 	for x := 1; x <= 1000; x++ {
 		z = replace(z, "(cap, ", x)
 		z = replace(z, "(up, ", x)
 		z = replace(z, "(low, ", x)
 	}
-	
+
 	z = strings.ReplaceAll(z, ",", ", ")
 	x := SplitWhiteSpaces(z)
 	x = format(x, ",")
@@ -92,19 +92,19 @@ func readFile(name string) string {
 
 func hex(text string) string {
 	z, _ := strconv.ParseUint(text, 16, 64)
-	if strings.Contains(string(text[0]) , "'") || strings.Contains(string(text[0]) , "‘") {
-	return "'" + strconv.Itoa(int(z))
-} else {
+	if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
+		return "'" + strconv.Itoa(int(z))
+	} else {
 		return strconv.Itoa(int(z))
-}
+	}
 }
 
 func bin(text string) string {
 	z, _ := strconv.ParseUint(text, 2, 64)
-	if strings.Contains(string(text[0]) , "'") || strings.Contains(string(text[0]) , "‘") {
+	if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
 		return "'" + strconv.Itoa(int(z))
 	} else {
-			return strconv.Itoa(int(z))
+		return strconv.Itoa(int(z))
 	}
 }
 
@@ -187,8 +187,8 @@ func search(n []string, sep string, function func(s string) string) []string {
 	for x := 1; x < len(n); x++ {
 		if strings.Contains(n[x], sep) {
 			if x-1 >= 0 {
-			n[x-1] = function(n[x-1])
-		}
+				n[x-1] = function(n[x-1])
+			}
 		}
 	}
 	return n
@@ -239,7 +239,7 @@ func format(n []string, a string) []string {
 
 func ancorrect(n []string) []string {
 	for x := 1; x < len(n); x++ {
-		if strings.Contains(string(n[x][0]), "a") || strings.Contains(string(n[x][0]), "u") || strings.Contains(string(n[x][0]), "i") || strings.Contains(string(n[x][0]), "e") || strings.Contains(string(n[x][0]), "o") || strings.Contains(string(n[x][0]), "A") || strings.Contains(string(n[x][0]), "U") || strings.Contains(string(n[x][0]), "O") || strings.Contains(string(n[x][0]), "I") || strings.Contains(string(n[x][0]), "E")   {
+		if strings.Contains(string(n[x][0]), "a") || strings.Contains(string(n[x][0]), "u") || strings.Contains(string(n[x][0]), "i") || strings.Contains(string(n[x][0]), "e") || strings.Contains(string(n[x][0]), "o") || strings.Contains(string(n[x][0]), "A") || strings.Contains(string(n[x][0]), "U") || strings.Contains(string(n[x][0]), "O") || strings.Contains(string(n[x][0]), "I") || strings.Contains(string(n[x][0]), "E") {
 			if an(n[x-1]) && len(n[x-1]) == 1 {
 				n[x-1] += "n"
 			}
@@ -250,17 +250,22 @@ func ancorrect(n []string) []string {
 
 func dothe(n []string) []string {
 	var newArr []string
-	for x := 0; x < len(n); x++ {
-		newArr = append(newArr, n[x])
-		if strings.Contains(n[x], ":") && (n[x+1] == "‘" || n[x+1] == "'"){
-			b := (n[x+1] + n[x+2])
+	counter := true
+	for x := 0; x < len(n)-1; x++ {
+
+		if n[x] == "‘" || n[x] == "'" || n[x] == "'" {
+			b := (n[x] + n[x+1])
 			newArr = append(newArr, b)
 			x++
-			x++
-		} else if (x+1 < len(n)) && (n[x+1] == "‘" || n[x+1] == "'") {
-			b := (n[x] + n[x+1])
-			newArr[x] = b
-			x++
+			counter = false
+		} else if !(n[x] == "‘" || n[x] == "'" || n[x] == "'") {
+			if counter == false && x+1 < len(n) && n[x+1] == "'" {
+				newArr = append(newArr, n[x]+"'")
+				x++
+				counter = true
+			} else {
+				newArr = append(newArr, n[x])
+			}
 		}
 	}
 	return newArr
