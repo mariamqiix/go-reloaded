@@ -257,9 +257,9 @@ func dothe(n []string) []string {
 			newArr = append(newArr, b)
 			x++
 			x++
-		} else if x+1 < len(n) && ((n[x+1] == "‘" || n[x+1] == "'")|| n[x+1] == "'") {
+		} else if (x+1 < len(n)) && (n[x+1] == "‘" || n[x+1] == "'") {
 			b := (n[x] + n[x+1])
-			newArr[x-1] = b
+			newArr[x] = b
 			x++
 		}
 	}
