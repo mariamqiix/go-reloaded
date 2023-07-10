@@ -92,12 +92,20 @@ func readFile(name string) string {
 
 func hex(text string) string {
 	z, _ := strconv.ParseUint(text, 16, 64)
-	return strconv.Itoa(int(z))
+	if strings.Contains(string(text[0]) , "'") || strings.Contains(string(text[0]) , "‘") {
+	return "'" + strconv.Itoa(int(z))
+} else {
+		return strconv.Itoa(int(z))
+}
 }
 
 func bin(text string) string {
 	z, _ := strconv.ParseUint(text, 2, 64)
-	return strconv.Itoa(int(z))
+	if strings.Contains(string(text[0]) , "'") || strings.Contains(string(text[0]) , "‘") {
+		return "'" + strconv.Itoa(int(z))
+	} else {
+			return strconv.Itoa(int(z))
+	}
 }
 
 func up(text string) string {
