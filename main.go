@@ -44,13 +44,14 @@ func correct(s string) string {
 	search(n, "(hex)", hex)
 	search(n, "(bin)", bin)
 	search(n, "(low)", low)
+	n = dothe(n)
 	z := strings.Join(n, " ")
-	z = strings.ReplaceAll(z, " (hex)", "")
-	z = strings.ReplaceAll(z, " (bin)", "")
-	z = strings.ReplaceAll(z, " (low)", "")
-	z = strings.ReplaceAll(z, " hex)", "")
-	z = strings.ReplaceAll(z, " (cap)", "")
-	z = strings.ReplaceAll(z, " (up)", "")
+	z = strings.ReplaceAll(z, "(hex) ", "")
+	z = strings.ReplaceAll(z, "(bin) ", "")
+	z = strings.ReplaceAll(z, "(low) ", "")
+	z = strings.ReplaceAll(z, "hex) ", "")
+	z = strings.ReplaceAll(z, "(cap) ", "")
+	z = strings.ReplaceAll(z, "(up) ", "")
 	
 	z = strings.ReplaceAll(z, " .", ".")
 	for x := 1; x <= 1000; x++ {
@@ -61,7 +62,6 @@ func correct(s string) string {
 	
 	z = strings.ReplaceAll(z, ",", ", ")
 	x := SplitWhiteSpaces(z)
-	x = dothe(x)
 	x = format(x, ",")
 	x = format(x, ",")
 	x = format(x, "?")

@@ -1,1 +1,1 @@
-(hex) A As (low, 10) Elton John said: ' f  I am the most well-known homosexual in the world ' .... .
+(bin) A As (low, 10) Elton John said: ' f (hex) I am the most well-known homosexual in the world ' .... .
