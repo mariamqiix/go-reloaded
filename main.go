@@ -30,11 +30,11 @@ func main() {
 func correct(s string) string {
 	n := SplitWhiteSpaces(s)
 
-	for x := 1; x <= 4000 ; x++ {
+	for x := 1; x <= 4000; x++ {
 		search2(n, "(low,", x, x, low)
 	}
 	search(n, "(up)", up)
-	for x := 1; x <= 4000 ; x++ {
+	for x := 1; x <= 4000; x++ {
 		search2(n, "(up,", x, x, up)
 	}
 	search(n, "(cap)", cap)
@@ -55,7 +55,7 @@ func correct(s string) string {
 	z = strings.ReplaceAll(z, "(up) ", "")
 
 	z = strings.ReplaceAll(z, " .", ".")
-	for x := 1; x <= 4000 ; x++ {
+	for x := 1; x <= 4000; x++ {
 		z = replace(z, "(cap, ", x)
 		z = replace(z, "(up, ", x)
 		z = replace(z, "(low, ", x)
@@ -110,7 +110,8 @@ func hex(text string) string {
 			return strconv.Itoa(int(z))
 		}
 	}
-	return text + " (this word is not a hexdecimal number)"
+	fmt.Println("note: " + text + " (this word is not a hexdecimal number)")
+	return text
 }
 
 func bin(text string) string {
@@ -130,7 +131,8 @@ func bin(text string) string {
 			return strconv.Itoa(int(z))
 		}
 	}
-	return text + " (this word is not a binary number)"
+	fmt.Println("note:" + text + " (this word is not a binary number)")
+	return text
 }
 
 func up(text string) string {
@@ -276,16 +278,15 @@ func ancorrect(n []string) []string {
 func dothe(n []string) []string {
 	var newArr []string
 	counter := true
-	for x := 0; x <= len(n)-1; x++ {
-
-		if n[x] == "‘" || n[x] == "'" || n[x] == "'" {
+	for x := 0; x < len(n); x++ {
+		if counter == true && (n[x] == "‘" || n[x] == "'") {
 			b := (n[x] + n[x+1])
 			newArr = append(newArr, b)
 			x++
 			counter = false
-		} else if !(n[x] == "‘" || n[x] == "'" || n[x] == "'") {
-			if counter == false && x+1 < len(n) && n[x+1] == "'" {
-				newArr = append(newArr, n[x]+n[x+1])
+		} else if !(n[x] == "‘" || n[x] == "'" ) {
+			if counter == false && x+1 < len(n) && (n[x+1] == "'" || n[x+1] == "‘") {
+				newArr = append(newArr, n[x]+ n[x+1])
 				x++
 				counter = true
 			} else {
@@ -301,12 +302,12 @@ func dothe2(n []string) []string {
 	counter := true
 	for x := 0; x <= len(n)-1; x++ {
 
-		if n[x] == "‘" || n[x] == "\"" {
+		if counter == true && ( n[x] == "\"") {
 			b := (n[x] + n[x+1])
 			newArr = append(newArr, b)
 			x++
 			counter = false
-		} else if !(n[x] == "‘" || n[x] == "\"") {
+		} else if !(n[x] == "\"") {
 			if counter == false && x+1 < len(n) && n[x+1] == "\"" {
 				newArr = append(newArr, n[x]+n[x+1])
 				x++
@@ -319,15 +320,14 @@ func dothe2(n []string) []string {
 	return newArr
 }
 
-
 func format2(n []string, a string) []string {
 	var newArr []string
 	for x := 0; x < len(n); x++ {
-			if strings.Contains(n[x], a) {
-				x++
-			} else {
-				newArr = append(newArr, n[x])
-			}
+		if strings.Contains(n[x], a) {
+			x++
+		} else {
+			newArr = append(newArr, n[x])
+		}
 	}
 	return newArr
 }
