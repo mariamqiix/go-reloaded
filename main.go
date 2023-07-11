@@ -30,15 +30,15 @@ func main() {
 func correct(s string) string {
 	n := SplitWhiteSpaces(s)
 
-	for x := 1; x <= 1000; x++ {
+	for x := 1; x <= 4000 ; x++ {
 		search2(n, "(low,", x, x, low)
 	}
 	search(n, "(up)", up)
-	for x := 1; x <= 1000; x++ {
+	for x := 1; x <= 4000 ; x++ {
 		search2(n, "(up,", x, x, up)
 	}
 	search(n, "(cap)", cap)
-	for x := 1; x <= 1000; x++ {
+	for x := 1; x <= 4000; x++ {
 		search2(n, "cap,", x, x, cap)
 	}
 	search(n, "(hex)", hex)
@@ -47,15 +47,15 @@ func correct(s string) string {
 	n = dothe(n)
 	n = dothe2(n)
 	z := strings.Join(n, " ")
-	z = strings.ReplaceAll(z,"(hex) ", "")
-	z = strings.ReplaceAll(z,"(bin) ", "")
-	z = strings.ReplaceAll(z,"(low) ", "")
-	z = strings.ReplaceAll(z,"hex) ", "")
-	z = strings.ReplaceAll(z,"(cap) ", "")
-	z = strings.ReplaceAll(z,"(up) ", "")
+	z = strings.ReplaceAll(z, "(hex) ", "")
+	z = strings.ReplaceAll(z, "(bin) ", "")
+	z = strings.ReplaceAll(z, "(low) ", "")
+	z = strings.ReplaceAll(z, "hex) ", "")
+	z = strings.ReplaceAll(z, "(cap) ", "")
+	z = strings.ReplaceAll(z, "(up) ", "")
 
 	z = strings.ReplaceAll(z, " .", ".")
-	for x := 1; x <= 1000; x++ {
+	for x := 1; x <= 4000 ; x++ {
 		z = replace(z, "(cap, ", x)
 		z = replace(z, "(up, ", x)
 		z = replace(z, "(low, ", x)
@@ -93,40 +93,41 @@ func readFile(name string) string {
 
 func hex(text string) string {
 	cond := true
-	for _, c:= range text {
-		if (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')|| (c >= 'a' && c <= 'f') || string(c) == "‘" || string(c) == "'"{
-			cond = true 
+	for _, c := range text {
+		if (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f') || string(c) == "‘" || string(c) == "'" {
+			cond = true
 		} else {
 			cond = false
 		}
 	}
 	if cond == true {
-	z, _ := strconv.ParseUint(text, 16, 64)
-	if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
-		return "'" + strconv.Itoa(int(z))
-	} else {
-		return strconv.Itoa(int(z))
+		z, _ := strconv.ParseUint(text, 16, 64)
+		if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
+			return "'" + strconv.Itoa(int(z))
+		} else {
+			return strconv.Itoa(int(z))
+		}
 	}
-}
-return text + " (this word is not a hexdecimal number)"
+	return text + " (this word is not a hexdecimal number)"
 }
 
 func bin(text string) string {
-	cond := true 
-	for _, c:= range text {
-		if c == '0' || c == '1' || string(c) == "‘" || string(c) == "'"{
-			cond = true 
+	cond := true
+	for _, c := range text {
+		if c == '0' || c == '1' || string(c) == "‘" || string(c) == "'" {
+			cond = true
 		} else {
 			cond = false
 		}
 	}
 	if cond == true {
-	z, _ := strconv.ParseUint(text, 2, 64)
-	if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
-		return "'" + strconv.Itoa(int(z))
-	} else {
-		return strconv.Itoa(int(z))
-	} }
+		z, _ := strconv.ParseUint(text, 2, 64)
+		if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
+			return "'" + strconv.Itoa(int(z))
+		} else {
+			return strconv.Itoa(int(z))
+		}
+	}
 	return text + " (this word is not a binary number)"
 }
 
@@ -298,12 +299,12 @@ func dothe2(n []string) []string {
 	counter := true
 	for x := 0; x <= len(n)-1; x++ {
 
-		if n[x] == "‘" || n[x] == "\""  {
+		if n[x] == "‘" || n[x] == "\"" {
 			b := (n[x] + n[x+1])
 			newArr = append(newArr, b)
 			x++
 			counter = false
-		} else if !(n[x] == "‘" || n[x] == "\"" ) {
+		} else if !(n[x] == "‘" || n[x] == "\"") {
 			if counter == false && x+1 < len(n) && n[x+1] == "\"" {
 				newArr = append(newArr, n[x]+n[x+1])
 				x++
@@ -315,3 +316,5 @@ func dothe2(n []string) []string {
 	}
 	return newArr
 }
+
+
