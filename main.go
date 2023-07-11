@@ -50,7 +50,7 @@ func correct(s string) string {
 	z = strings.ReplaceAll(z, "(hex) ", "")
 	z = strings.ReplaceAll(z, "(bin) ", "")
 	z = strings.ReplaceAll(z, "(low) ", "")
-	z = strings.ReplaceAll(z, "hex) ", "")
+	z = strings.ReplaceAll(z, "(hex) ", "")
 	z = strings.ReplaceAll(z, "(cap) ", "")
 	z = strings.ReplaceAll(z, "(up) ", "")
 
@@ -71,6 +71,8 @@ func correct(s string) string {
 	x = format(x, ":")
 	x = format(x, ";")
 	x = format(x, ".")
+	x = format2(x, "(hex)")
+	x = format2(x, "(bin)")
 	x = ancorrect(x)
 	b := strings.Join(x, " ")
 	return b
@@ -318,3 +320,14 @@ func dothe2(n []string) []string {
 }
 
 
+func format2(n []string, a string) []string {
+	var newArr []string
+	for x := 0; x < len(n); x++ {
+			if strings.Contains(n[x], a) {
+				x++
+			} else {
+				newArr = append(newArr, n[x])
+			}
+	}
+	return newArr
+}
