@@ -45,13 +45,14 @@ func correct(s string) string {
 	search(n, "(bin)", bin)
 	search(n, "(low)", low)
 	n = dothe(n)
+	n = dothe2(n)
 	z := strings.Join(n, " ")
-	z = strings.ReplaceAll(z, "(hex) ", "")
-	z = strings.ReplaceAll(z, "(bin) ", "")
-	z = strings.ReplaceAll(z, "(low) ", "")
-	z = strings.ReplaceAll(z, "hex) ", "")
-	z = strings.ReplaceAll(z, "(cap) ", "")
-	z = strings.ReplaceAll(z, "(up) ", "")
+	z = strings.ReplaceAll(z,"(hex) ", "")
+	z = strings.ReplaceAll(z,"(bin) ", "")
+	z = strings.ReplaceAll(z,"(low) ", "")
+	z = strings.ReplaceAll(z,"hex) ", "")
+	z = strings.ReplaceAll(z,"(cap) ", "")
+	z = strings.ReplaceAll(z,"(up) ", "")
 
 	z = strings.ReplaceAll(z, " .", ".")
 	for x := 1; x <= 1000; x++ {
@@ -91,15 +92,15 @@ func readFile(name string) string {
 }
 
 func hex(text string) string {
-	cond = true
+	cond := true
 	for _, c:= range text {
-		if (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')|| (c >= 'a' && c <= 'f') {
+		if (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')|| (c >= 'a' && c <= 'f') || string(c) == "‘" || string(c) == "'"{
 			cond = true 
 		} else {
-			return text
+			cond = false
 		}
 	}
-	if cond = true {
+	if cond == true {
 	z, _ := strconv.ParseUint(text, 16, 64)
 	if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
 		return "'" + strconv.Itoa(int(z))
@@ -107,15 +108,26 @@ func hex(text string) string {
 		return strconv.Itoa(int(z))
 	}
 }
+return text + " (this word is not a hexdecimal number)"
 }
 
 func bin(text string) string {
+	cond := true 
+	for _, c:= range text {
+		if c == '0' || c == '1' || string(c) == "‘" || string(c) == "'"{
+			cond = true 
+		} else {
+			cond = false
+		}
+	}
+	if cond == true {
 	z, _ := strconv.ParseUint(text, 2, 64)
 	if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
 		return "'" + strconv.Itoa(int(z))
 	} else {
 		return strconv.Itoa(int(z))
-	}
+	} }
+	return text + " (this word is not a binary number)"
 }
 
 func up(text string) string {
@@ -261,7 +273,7 @@ func ancorrect(n []string) []string {
 func dothe(n []string) []string {
 	var newArr []string
 	counter := true
-	for x := 0; x < len(n)-1; x++ {
+	for x := 0; x <= len(n)-1; x++ {
 
 		if n[x] == "‘" || n[x] == "'" || n[x] == "'" {
 			b := (n[x] + n[x+1])
@@ -270,7 +282,30 @@ func dothe(n []string) []string {
 			counter = false
 		} else if !(n[x] == "‘" || n[x] == "'" || n[x] == "'") {
 			if counter == false && x+1 < len(n) && n[x+1] == "'" {
-				newArr = append(newArr, n[x]+"'")
+				newArr = append(newArr, n[x]+n[x+1])
+				x++
+				counter = true
+			} else {
+				newArr = append(newArr, n[x])
+			}
+		}
+	}
+	return newArr
+}
+
+func dothe2(n []string) []string {
+	var newArr []string
+	counter := true
+	for x := 0; x <= len(n)-1; x++ {
+
+		if n[x] == "‘" || n[x] == "\""  {
+			b := (n[x] + n[x+1])
+			newArr = append(newArr, b)
+			x++
+			counter = false
+		} else if !(n[x] == "‘" || n[x] == "\"" ) {
+			if counter == false && x+1 < len(n) && n[x+1] == "\"" {
+				newArr = append(newArr, n[x]+n[x+1])
 				x++
 				counter = true
 			} else {
