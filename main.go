@@ -47,12 +47,12 @@ func correct(s string) string {
 	n = dothe(n)
 	n = dothe2(n)
 	z := strings.Join(n, " ")
-	z = strings.ReplaceAll(z, "(hex) ", "")
-	z = strings.ReplaceAll(z, "(bin) ", "")
-	z = strings.ReplaceAll(z, "(low) ", "")
-	z = strings.ReplaceAll(z, "(hex) ", "")
-	z = strings.ReplaceAll(z, "(cap) ", "")
-	z = strings.ReplaceAll(z, "(up) ", "")
+	z = strings.ReplaceAll(z, "(hex)", "")
+	z = strings.ReplaceAll(z, "(bin)", "")
+	z = strings.ReplaceAll(z, "(low)", "")
+	z = strings.ReplaceAll(z, "(hex)", "")
+	z = strings.ReplaceAll(z, "(cap)", "")
+	z = strings.ReplaceAll(z, "(up)", "")
 
 	z = strings.ReplaceAll(z, " .", ".")
 	for x := 1; x <= 4000; x++ {
@@ -73,6 +73,7 @@ func correct(s string) string {
 	x = format(x, ".")
 	x = format2(x, "(hex)")
 	x = format2(x, "(bin)")
+	x = format2(x, "(cap)")
 	x = ancorrect(x)
 	b := strings.Join(x, " ")
 	return b
@@ -104,12 +105,19 @@ func hex(text string) string {
 	}
 	if cond == true {
 		z, _ := strconv.ParseUint(text, 16, 64)
+		if int(z) >= 0 {
 		if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
 			return "'" + strconv.Itoa(int(z))
 		} else {
-			return strconv.Itoa(int(z))
+			if int(z) >= 0 {
+			return strconv.Itoa(int(z))}
 		}
+	} else {
+		fmt.Println("note:" + text + " (this word is out of hexdecimal range)")
+		return text
+
 	}
+}
 	fmt.Println("note: " + text + " (this word is not a hexdecimal number)")
 	return text
 }
@@ -124,11 +132,16 @@ func bin(text string) string {
 		}
 	}
 	if cond == true {
-		z, _ := strconv.ParseUint(text, 2, 64)
+		z, _ := strconv.ParseUint(text, 2, 64)	
+		if int(z) >= 0 {
 		if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
 			return "'" + strconv.Itoa(int(z))
 		} else {
-			return strconv.Itoa(int(z))
+			return strconv.Itoa(int(z))}
+		} else {
+			fmt.Println("note:" + text + " (this word is out of binary range)")
+			return text
+
 		}
 	}
 	fmt.Println("note:" + text + " (this word is not a binary number)")
@@ -162,9 +175,18 @@ func low(text string) string {
 }
 
 func cap(text string) string {
-	s := strings.Title(low(text))
-	return s
-
+	x := low(text)
+	n := ""
+	count := 0
+	for _, c := range x {
+		if c >= 'a' && c<= 'z' && count == 0 {
+	n  += string(c-('a'-'A'))
+	count++
+		} else {
+			n += string (c)
+		}
+	}
+	return n
 }
 
 func an(text string) bool {
