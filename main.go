@@ -11,7 +11,7 @@ import (
 func main() {
 	osNo := len(os.Args)
 	if osNo != 3 {
-
+		fmt.Println("error , os.Args != 3")
 		return
 	} else {
 		input := os.Args[1]
@@ -29,7 +29,6 @@ func main() {
 }
 func correct(s string) string {
 	n := SplitWhiteSpaces(s)
-
 	for x := 1; x <= 4000; x++ {
 		search2(n, "(low,", x, x, low)
 	}
@@ -53,14 +52,12 @@ func correct(s string) string {
 	z = strings.ReplaceAll(z, "(hex)", "")
 	z = strings.ReplaceAll(z, "(cap)", "")
 	z = strings.ReplaceAll(z, "(up)", "")
-
 	z = strings.ReplaceAll(z, " .", ".")
 	for x := 1; x <= 4000; x++ {
 		z = replace(z, "(cap, ", x)
 		z = replace(z, "(up, ", x)
 		z = replace(z, "(low, ", x)
 	}
-
 	z = strings.ReplaceAll(z, ",", ", ")
 	x := SplitWhiteSpaces(z)
 	x = format(x, ",")
@@ -76,9 +73,15 @@ func correct(s string) string {
 	x = format2(x, "(cap)")
 	x = ancorrect(x)
 	b := strings.Join(x, " ")
-	return b
-}
+	b = strings.ReplaceAll(b, " ?" , "?")
+	b = strings.ReplaceAll(b, " !" , "!")
+	d := SplitWhiteSpaces(b)
+	d = dothe(d)
+	h := strings.Join(d, " ")
 
+
+	return h
+}
 func readFile(name string) string {
 	var text string
 	file, err := os.Open(name)
@@ -93,7 +96,6 @@ func readFile(name string) string {
 	file.Close()
 	return text
 }
-
 func hex(text string) string {
 	cond := true
 	for _, c := range text {
@@ -106,22 +108,21 @@ func hex(text string) string {
 	if cond == true {
 		z, _ := strconv.ParseUint(text, 16, 64)
 		if int(z) >= 0 {
-		if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
-			return "'" + strconv.Itoa(int(z))
+			if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
+				return "'" + strconv.Itoa(int(z))
+			} else {
+				if int(z) >= 0 {
+					return strconv.Itoa(int(z))
+				}
+			}
 		} else {
-			if int(z) >= 0 {
-			return strconv.Itoa(int(z))}
+			fmt.Println("note:" + text + " (this word is out of hexdecimal range)")
+			return text
 		}
-	} else {
-		fmt.Println("note:" + text + " (this word is out of hexdecimal range)")
-		return text
-
 	}
-}
 	fmt.Println("note: " + text + " (this word is not a hexdecimal number)")
 	return text
 }
-
 func bin(text string) string {
 	cond := true
 	for _, c := range text {
@@ -132,22 +133,21 @@ func bin(text string) string {
 		}
 	}
 	if cond == true {
-		z, _ := strconv.ParseUint(text, 2, 64)	
+		z, _ := strconv.ParseUint(text, 2, 64)
 		if int(z) >= 0 {
-		if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
-			return "'" + strconv.Itoa(int(z))
-		} else {
-			return strconv.Itoa(int(z))}
+			if strings.Contains(string(text[0]), "'") || strings.Contains(string(text[0]), "‘") {
+				return "'" + strconv.Itoa(int(z))
+			} else {
+				return strconv.Itoa(int(z))
+			}
 		} else {
 			fmt.Println("note:" + text + " (this word is out of binary range)")
 			return text
-
 		}
 	}
 	fmt.Println("note:" + text + " (this word is not a binary number)")
 	return text
 }
-
 func up(text string) string {
 	X := []rune(text)
 	c := ""
@@ -160,7 +160,6 @@ func up(text string) string {
 	}
 	return c
 }
-
 func low(text string) string {
 	X := []rune(text)
 	c := ""
@@ -173,34 +172,30 @@ func low(text string) string {
 	}
 	return c
 }
-
 func cap(text string) string {
 	x := low(text)
 	n := ""
 	count := 0
 	for _, c := range x {
-		if c >= 'a' && c<= 'z' && count == 0 {
-	n  += string(c-('a'-'A'))
-	count++
+		if c >= 'a' && c <= 'z' && count == 0 {
+			n += string(c - ('a' - 'A'))
+			count++
 		} else {
-			n += string (c)
+			n += string(c)
 		}
 	}
 	return n
 }
-
 func an(text string) bool {
 	if text[0] == 'a' {
 		return true
 	}
 	return false
 }
-
 func printError(err error) {
 	fmt.Println("ERROR: " + err.Error())
 	os.Exit(1)
 }
-
 func IterativePower(nb int, power int) int {
 	nn := 1
 	if power < 0 {
@@ -214,7 +209,6 @@ func IterativePower(nb int, power int) int {
 	}
 	return nn
 }
-
 func SplitWhiteSpaces(s string) []string {
 	var res []string
 	var x string
@@ -231,7 +225,6 @@ func SplitWhiteSpaces(s string) []string {
 	}
 	return res
 }
-
 func search(n []string, sep string, function func(s string) string) []string {
 	for x := 1; x < len(n); x++ {
 		if strings.Contains(n[x], sep) {
@@ -242,7 +235,6 @@ func search(n []string, sep string, function func(s string) string) []string {
 	}
 	return n
 }
-
 func search2(n []string, sep string, sepp, v int, function func(s string) string) []string {
 	for x := 1; x < len(n); x++ {
 		if strings.Contains(n[x], sep) {
@@ -260,9 +252,7 @@ func search2(n []string, sep string, sepp, v int, function func(s string) string
 	}
 	return n
 }
-
 func replace(z, n string, x int) string {
-
 	num := strconv.Itoa(x)
 	n += num + ")"
 	z = strings.ReplaceAll(z, n, "")
@@ -285,7 +275,6 @@ func format(n []string, a string) []string {
 	}
 	return newArr
 }
-
 func ancorrect(n []string) []string {
 	for x := 1; x < len(n); x++ {
 		if strings.Contains(string(n[x][0]), "a") || strings.Contains(string(n[x][0]), "u") || strings.Contains(string(n[x][0]), "i") || strings.Contains(string(n[x][0]), "e") || strings.Contains(string(n[x][0]), "o") || strings.Contains(string(n[x][0]), "A") || strings.Contains(string(n[x][0]), "U") || strings.Contains(string(n[x][0]), "O") || strings.Contains(string(n[x][0]), "I") || strings.Contains(string(n[x][0]), "E") {
@@ -296,35 +285,79 @@ func ancorrect(n []string) []string {
 	}
 	return n
 }
-
 func dothe(n []string) []string {
 	var newArr []string
 	counter := true
 	for x := 0; x < len(n); x++ {
-		if counter == true && (n[x] == "‘" || n[x] == "'") {
-			b := (n[x] + n[x+1])
-			newArr = append(newArr, b)
-			x++
-			counter = false
-		} else if !(n[x] == "‘" || n[x] == "'" ) {
+		if strings.Contains(string(n[x][0]), "'") && strings.Contains(string(n[x][len(n[x])-1]), "'") && len(n[x]) > 1 {
+			newArr = append(newArr, n[x])
+		} else if counter == true && (string(n[x][0]) == "‘" || string(n[x][0]) == "'") {
+			if x+1 < len(n) {
+				if len(n[x]) > 1 {
+					if n[x+1] == "'" {
+						b := n[x] + n[x+1]
+						newArr = append(newArr, b)
+						x++
+					} else {
+						newArr = append(newArr, n[x])
+						if string(n[x][len(n[x])-1]) == "'" {
+							counter = true
+						} else {
+							counter = false
+						}
+					}
+				} else if x+2 < len(n) {
+					if n[x+2] == "'" || n[x+2] == "‘" {
+						b := (n[x] + n[x+1] + n[x+2])
+						newArr = append(newArr, b)
+						x++
+						x++
+						counter = true
+					} else {
+						b := (n[x] + n[x+1])
+						newArr = append(newArr, b)
+						x++
+						if strings.Contains(n[x], "'") && n[x] != "don't" {
+							counter = true
+						} else {
+							counter = false
+						}
+					}
+				} else {
+					b := (n[x] + n[x+1])
+					newArr = append(newArr, b)
+					x++
+					if strings.Contains(n[x], "'") && n[x] != "don't" {
+						counter = true
+					} else {
+						counter = false
+					}
+				}
+			} else {
+				b := (n[x])
+						newArr = append(newArr, b)
+			}
+		} else if !(n[x] == "‘" || n[x] == "'") {
 			if counter == false && x+1 < len(n) && (n[x+1] == "'" || n[x+1] == "‘") {
-				newArr = append(newArr, n[x]+ n[x+1])
+				newArr = append(newArr, n[x]+n[x+1])
 				x++
 				counter = true
 			} else {
+				if strings.Contains(n[x], "'") && n[x] != "don't" {
+					counter = true
+				}
 				newArr = append(newArr, n[x])
 			}
 		}
 	}
+
 	return newArr
 }
-
 func dothe2(n []string) []string {
 	var newArr []string
 	counter := true
 	for x := 0; x <= len(n)-1; x++ {
-
-		if counter == true && ( n[x] == "\"") {
+		if counter == true && (n[x] == "\"") {
 			b := (n[x] + n[x+1])
 			newArr = append(newArr, b)
 			x++
@@ -341,7 +374,6 @@ func dothe2(n []string) []string {
 	}
 	return newArr
 }
-
 func format2(n []string, a string) []string {
 	var newArr []string
 	for x := 0; x < len(n); x++ {
