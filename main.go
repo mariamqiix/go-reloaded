@@ -187,7 +187,7 @@ func cap(text string) string {
 	return n
 }
 func an(text string) bool {
-	if text[0] == 'a' {
+	if text[0] == 'a' || text[0] == 'A' {
 		return true
 	}
 	return false
