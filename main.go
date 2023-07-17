@@ -29,6 +29,7 @@ func main() {
 }
 func correct(s string) string {
 	n := SplitWhiteSpaces(s)
+	n = ancorrect(n)
 	for x := 1; x <= 4000; x++ {
 		search2(n, "(low,", x, x, low)
 	}
@@ -67,14 +68,15 @@ func correct(s string) string {
 	x = format(x, "…")
 	x = format(x, ":")
 	x = format(x, ";")
+	x = format(x, ".") 
 	x = format(x, ".")
 	x = format2(x, "(hex)")
 	x = format2(x, "(bin)")
 	x = format2(x, "(cap)")
-	x = ancorrect(x)
 	b := strings.Join(x, " ")
 	b = strings.ReplaceAll(b, " ?" , "?")
 	b = strings.ReplaceAll(b, " !" , "!")
+	b = strings.ReplaceAll(b, " ," , ",")
 	d := SplitWhiteSpaces(b)
 	d = dothe(d)
 	h := strings.Join(d, " ")
