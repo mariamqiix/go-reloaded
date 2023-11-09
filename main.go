@@ -44,17 +44,11 @@ func correct(s string) string {
 	n = deleteNil(n)
 	n = ancorrect(n)
 
-	for x := 1; x <= 4000; x++ {
-		search2(n, "(low,", x, x, strings.ToLower)
-	}
+		search22(n, "(low,",  strings.ToLower)
 	search(n, "(up)", strings.ToUpper)
-	for x := 1; x <= 4000; x++ {
-		search2(n, "(up,", x, x,  strings.ToUpper)
-	}
+		search22(n, "(up,",  strings.ToUpper)
 	search(n, "(cap)", cap)
-	for x := 1; x <= 4000; x++ {
-		search2(n, "cap,", x, x, cap)
-	}
+		search22(n, "cap,",  cap)
 
 	search(n, "(hex)", hexdecimal)
 	search(n, "(bin)", Binary)
@@ -63,7 +57,7 @@ func correct(s string) string {
 	n = cotations('\'', n)
 	n = cotations('"', n)
 	n = cotations('’', n)
-	
+
 	z := strings.Join(n, " ")
 	z = strings.ReplaceAll(z, "(hex)", "")
 	z = strings.ReplaceAll(z, "(bin)", "")
@@ -126,7 +120,8 @@ func cap(text string) string {
 	x :=  strings.ToLower(text)
 	for i := 0; i < len(text); i++ {
 		if x[i] >= 'a' && x[i] <= 'z' {
-			strings.ToUpper(string(rune(x[i])))
+			x = x[:i] + strings.ToUpper(string(x[i])) + x[i+1:]
+			return x
 		}
 	}
 	return x
@@ -153,17 +148,21 @@ func search(n []string, sep string, function func(s string) string) []string {
 	}
 	return n
 }
-func search2(n []string, sep string, sepp, v int, function func(s string) string) []string {
+
+func search22(n []string, sep string, function func(s string) string) []string {
 	for x := 1; x < len(n); x++ {
-		if strings.Contains(n[x], sep) {
-			num := strconv.Itoa(sepp)
-			if x+1 < len(n) {
-				if strings.Contains(n[x+1], num) {
-					for z := 1; z <= v; z++ {
-						if z <= x {
-							n[x-z] = function(n[x-z])
-						}
-					}
+		if strings.Contains(n[x], sep) { 
+			n[x] = ""
+			z := strings.TrimRight(n[x+1], ")")
+			n[x+1] = ""
+			num , err := strconv.Atoi(z)
+			if err != nil {
+				printError(err)
+			}
+			for z := 1; z <= num; z++ {
+				if z <= x {
+					n[x-z] = function(n[x-z])
+					fmt.Println(function(n[x-z]))
 				}
 			}
 		}
