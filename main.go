@@ -66,11 +66,6 @@ func correct(s string) string {
 	z = strings.ReplaceAll(z, "(cap)", "")
 	z = strings.ReplaceAll(z, "(up)", "")
 	z = strings.ReplaceAll(z, " .", ".")
-	for x := 1; x <= 4000; x++ {
-		z = replace(z, "(cap, ", x)
-		z = replace(z, "(up, ", x)
-		z = replace(z, "(low, ", x)
-	}
 	z = strings.ReplaceAll(z, ",", " , ")
 	x := strings.Split(z, " ")
 	x = deleteNil(x)
@@ -150,7 +145,7 @@ func search(n []string, sep string, function func(s string) string) []string {
 }
 
 func search22(n []string, sep string, function func(s string) string) []string {
-	for x := 1; x < len(n); x++ {
+	for x := 0; x < len(n); x++ {
 		if strings.Contains(n[x], sep) { 
 			n[x] = ""
 			z := strings.TrimRight(n[x+1], ")")
