@@ -42,24 +42,28 @@ func correct(s string) string {
 
 	n := strings.Split(s, " ")
 	n = deleteNil(n)
-	fmt.Print(len(n))
 	n = ancorrect(n)
+
 	for x := 1; x <= 4000; x++ {
-		search2(n, "(low,", x, x, low)
+		search2(n, "(low,", x, x, strings.ToLower)
 	}
-	search(n, "(up)", up)
+	search(n, "(up)", strings.ToUpper)
 	for x := 1; x <= 4000; x++ {
-		search2(n, "(up,", x, x, up)
+		search2(n, "(up,", x, x,  strings.ToUpper)
 	}
 	search(n, "(cap)", cap)
 	for x := 1; x <= 4000; x++ {
 		search2(n, "cap,", x, x, cap)
 	}
+
 	search(n, "(hex)", hexdecimal)
 	search(n, "(bin)", Binary)
-	search(n, "(low)", low)
+	search(n, "(low)", strings.ToLower)
+
 	n = cotations('\'', n)
 	n = cotations('"', n)
+	n = cotations('’', n)
+	
 	z := strings.Join(n, " ")
 	z = strings.ReplaceAll(z, "(hex)", "")
 	z = strings.ReplaceAll(z, "(bin)", "")
@@ -76,9 +80,6 @@ func correct(s string) string {
 	z = strings.ReplaceAll(z, ",", " , ")
 	x := strings.Split(z, " ")
 	x = deleteNil(x)
-	x = format2(x, "(hex)")
-	x = format2(x, "(bin)")
-	x = format2(x, "(cap)")
 	b := strings.Join(x, " ")
 	d := strings.Split(b, " ")
 	h := strings.Join(d, " ")
@@ -121,16 +122,8 @@ func Binary(text string) string {
 
 }
 
-func up(text string) string {
-	return strings.ToUpper(text)
-}
-
-func low(text string) string {
-	return strings.ToLower(text)
-}
-
 func cap(text string) string {
-	x := low(text)
+	x :=  strings.ToLower(text)
 	for i := 0; i < len(text); i++ {
 		if x[i] >= 'a' && x[i] <= 'z' {
 			strings.ToUpper(string(rune(x[i])))
@@ -194,18 +187,6 @@ func ancorrect(n []string) []string {
 		}
 	}
 	return n
-}
-
-func format2(n []string, a string) []string {
-	var newArr []string
-	for x := 0; x < len(n); x++ {
-		if strings.Contains(n[x], a) {
-			x++
-		} else {
-			newArr = append(newArr, n[x])
-		}
-	}
-	return newArr
 }
 
 func cotations(n rune, s []string) []string {
