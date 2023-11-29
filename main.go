@@ -44,11 +44,11 @@ func correct(s string) string {
 	n = deleteNil(n)
 	n = ancorrect(n)
 
-		search22(n, "(low,",  strings.ToLower)
+	search22(n, "(low,", strings.ToLower)
 	search(n, "(up)", strings.ToUpper)
-		search22(n, "(up,",  strings.ToUpper)
+	search22(n, "(up,", strings.ToUpper)
 	search(n, "(cap)", cap)
-		search22(n, "cap,",  cap)
+	search22(n, "cap,", cap)
 
 	search(n, "(hex)", hexdecimal)
 	search(n, "(bin)", Binary)
@@ -72,8 +72,13 @@ func correct(s string) string {
 	b := strings.Join(x, " ")
 	d := strings.Split(b, " ")
 	h := strings.Join(d, " ")
-		h = strings.ReplaceAll(h," ,",",")
-
+	h = strings.ReplaceAll(h, " ,", ",")
+	s = strings.ReplaceAll(s, " ?", "?")
+	s = strings.ReplaceAll(s, " !", "!")
+	s = strings.ReplaceAll(s, " :", ":")
+	s = strings.ReplaceAll(s, " \"", "\"")
+	s = strings.ReplaceAll(s, " ;", ";")
+	s = strings.ReplaceAll(s, " .", ".")
 
 	return h
 }
@@ -112,7 +117,7 @@ func Binary(text string) string {
 }
 
 func cap(text string) string {
-	x :=  strings.ToLower(text)
+	x := strings.ToLower(text)
 	for i := 0; i < len(text); i++ {
 		if x[i] >= 'a' && x[i] <= 'z' {
 			x = x[:i] + strings.ToUpper(string(x[i])) + x[i+1:]
@@ -146,18 +151,17 @@ func search(n []string, sep string, function func(s string) string) []string {
 
 func search22(n []string, sep string, function func(s string) string) []string {
 	for x := 0; x < len(n); x++ {
-		if strings.Contains(n[x], sep) { 
+		if strings.Contains(n[x], sep) {
 			n[x] = ""
 			z := strings.TrimRight(n[x+1], ")")
 			n[x+1] = ""
-			num , err := strconv.Atoi(z)
+			num, err := strconv.Atoi(z)
 			if err != nil {
 				printError(err)
 			}
 			for z := 1; z <= num; z++ {
 				if z <= x {
 					n[x-z] = function(n[x-z])
-					fmt.Println(function(n[x-z]))
 				}
 			}
 		}
@@ -173,8 +177,8 @@ func replace(z, n string, x int) string {
 }
 
 func ancorrect(n []string) []string {
-	for x := 1 ; x < len(n); x++ {
-		if strings.Contains(strings.ToLower(string(n[x][0])), "o") || strings.Contains(strings.ToLower(string(n[x][0])), "u")  || strings.Contains(strings.ToLower(string(n[x][0])), "i")  || strings.Contains(strings.ToLower(string(n[x][0])), "e")  || strings.Contains(strings.ToLower(string(n[x][0])), "a")    {
+	for x := 1; x < len(n); x++ {
+		if strings.Contains(strings.ToLower(string(n[x][0])), "o") || strings.Contains(strings.ToLower(string(n[x][0])), "u") || strings.Contains(strings.ToLower(string(n[x][0])), "i") || strings.Contains(strings.ToLower(string(n[x][0])), "e") || strings.Contains(strings.ToLower(string(n[x][0])), "a") {
 			if an(n[x-1]) && len(n[x-1]) == 1 {
 				n[x-1] += "n"
 			}
@@ -195,7 +199,6 @@ func cotations(n rune, s []string) []string {
 			s[i+1] = string(n) + s[i+1]
 			s[i] = ""
 			i++
-			fmt.Print(cond)
 		} else if len(s[i]) > 0 && rune(s[i][0]) == n && cond {
 			s[i-1] = s[i-1] + string(n)
 			s[i] = ""
@@ -204,7 +207,6 @@ func cotations(n rune, s []string) []string {
 	}
 	return s
 }
-
 
 func deleteNil(s []string) []string {
 	var newArr []string
